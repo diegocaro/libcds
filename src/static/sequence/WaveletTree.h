@@ -85,6 +85,14 @@ namespace cds_static
 			uint quantile(size_t left,size_t right,uint q) const;
 			/* find the q-th smallest element in T[l..r] and return it's freq */
 			pair<uint,size_t> quantile_freq(size_t left,size_t right,uint q) const;
+      
+			void range_report(uint start, uint end, uint lowvoc, uint uppvoc, vector<uint> *res) const;
+
+			void range_report(uint start, uint end, vector<uint> *res) const;
+
+			uint next_value_pos(uint number, uint start, uint end) const;
+
+			void select_all(uint symbol, vector<uint> &res) const;
 
 			virtual size_t count(uint s) const;
 

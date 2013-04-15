@@ -1,8 +1,8 @@
 
 CPP=g++
 
-CPPFLAGS=-g3 -O0 -I../includes/ 
-#CPPFLAGS=-O3 -Wall -DNDEBUG -I../includes/
+#CPPFLAGS=-g3 -O0 -I../includes/ 
+CPPFLAGS=-O3 -Wall -DNDEBUG -I../includes/
 INCS=-I../../includes/
 LIB=../../lib/libcds.a
 

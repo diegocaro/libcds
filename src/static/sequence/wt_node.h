@@ -47,6 +47,13 @@ namespace cds_static
             virtual size_t rank(uint *symbol, size_t pos, uint l, wt_coder *c) const = 0;
             virtual size_t select(uint *symbol, size_t pos, uint l, wt_coder *c) const = 0;
             virtual pair<uint,size_t> quantile_freq(size_t left,size_t right,uint q) const = 0;
+
+            virtual void range_report(uint start, uint end, uint lowvoc, uint uppvoc, uint vocmin, uint vocmax, uint l, wt_coder *c, vector<uint> *res) const = 0;
+
+            virtual uint next_value_pos(uint number, uint start, uint end, uint vocmin, uint vocmax, uint l, wt_coder *c, uint *success) const = 0;
+
+            virtual void select_all(uint symbol, uint l, wt_coder *c, vector<uint> &res) const = 0;
+
             virtual uint access(size_t pos) const = 0;
             virtual uint access(size_t pos, size_t & rankp) const = 0;
             virtual size_t getSize() const = 0;

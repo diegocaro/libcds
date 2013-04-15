@@ -138,6 +138,41 @@ namespace cds_static
         pair<uint,size_t> res = root->quantile_freq(left,right,q);
         return std::make_pair( am->unmap(res.first) , res.second );
     }
+    
+    void WaveletTree::range_report(uint start, uint end, vector<uint> *res) const
+    {
+          root->range_report(start, end, 0, 1u << c->depth(), 0, 1u << c->depth(), 0, c, res);
+    }
+
+    void WaveletTree::range_report(uint start, uint end, uint lowvoc, uint uppvoc, vector<uint> *res) const
+    {
+      root->range_report(start, end, lowvoc, uppvoc, 0, 1u << c->depth(), 0, c, res);
+    }
+
+    uint WaveletTree::next_value_pos(uint number, uint start, uint end) const {
+    	uint success = 0;
+    	uint pos;
+    	pos = root->next_value_pos(number, start, end, 0, 1u << c->depth(), 0, c, &success);
+
+    	//printf("success: %u\n", success);
+
+    	if (success)
+    		return pos;
+    	else
+    		return this->n;
+
+    }
+
+    void WaveletTree::select_all(uint symbol, vector<uint> &res) const {
+    //	uint * s = c->get_symbol(am->map(symbol));
+  //  	root->select_all(s, 0, c, res);
+
+    	root->select_all(symbol, 0, c, res);
+
+//    	delete [] s;
+
+    }
+
 
     uint WaveletTree::access(size_t pos, size_t &rank) const
     {

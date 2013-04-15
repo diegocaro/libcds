@@ -238,6 +238,137 @@ namespace cds_static
         }
     }
 
+    void wt_node_internal::range_report(uint start, uint end, uint lowvoc, uint uppvoc, uint vocmin, uint vocmax, uint l, wt_coder *c, vector<uint> *res ) const
+    {
+      uint r1s, r1e, r0s, r0e;
+      uint vocmid;
+      vocmid = vocmin +  (1u << (c->depth()-l-1) ) ; //ceil((float)(vocmax-vocmin)/2) + vocmin;
+      //printf("level internal: %u\n",l);
+      //printf("vocmin: %u\n", vocmin);
+      //printf("vocmax: %u\n", vocmax);
+
+
+      if (start >= end) {
+    	//printf("start >= end in internal\n");
+    	  return;
+      }
+
+      if ( (lowvoc > vocmax) || (uppvoc < vocmin) || (vocmin < lowvoc && vocmin >= uppvoc) ) {
+    	  //symbols doesnt belong here
+    	//printf("node voc range [%u, %u)\n ", vocmin, vocmax);
+    	//printf(" should be in [%u, %u) \n", lowvoc, uppvoc);
+  		return;
+  	}
+
+    	r1s = bitmap->rank1(start-1);
+    	r1e = bitmap->rank1(end-1);
+
+    	r0s = start - r1s;
+    	r0e = end - r1e;
+
+
+  	   	if (NULL != left_child ) {
+    	    	left_child->range_report(r0s, r0e, lowvoc, uppvoc, vocmin, vocmid, l+1, c, res);
+    	    }
+
+
+    	    if (NULL != right_child ) {
+    	    	right_child->range_report(r1s, r1e, lowvoc, uppvoc, vocmid, vocmax, l+1, c, res);
+    	    }
+
+
+    }
+
+    uint wt_node_internal::next_value_pos(uint number, uint start, uint end, uint vocmin, uint vocmax, uint l, wt_coder *c, uint *success) const {
+    	uint r0s,r1s,r0e,r1e;
+    	uint vocmid;
+    	uint r;
+    	uint k;
+    	vocmid = vocmin +  (1u << (c->depth()-l-1) );
+
+    	if ( start >= end ) {
+    		//printf("out of substring\n");
+    		*success = 0;
+    		return 0;
+    	}
+
+    	r1s = bitmap->rank1(start-1);
+    	r1e = bitmap->rank1(end-1);
+
+    	r0s = start - r1s;
+    	r0e = end - r1e;
+
+    	//printf("left_child: %p\n", left_child);
+    	//printf("right_child: %p\n", right_child);
+    	//printf("level: %u\n", l);
+    	//printf("vocmin: %u\n", vocmin);
+    	//printf("vocmid: %u\n", vocmid);
+    	//printf("vocmax: %u\n", vocmax);
+
+    	//belong to right child
+    	if ( number >= vocmid) {
+    		if (right_child == NULL)
+    			return 0;
+
+    		//printf("r1\n");
+    		r = right_child->next_value_pos(number, r1s, r1e, vocmid, vocmax, l+1, c, success);
+    		k = bitmap->select1(r+1);
+    		//printf("r1: %u >> k: %u\n",r, k);
+    		return k;
+    	}
+    	else {
+    		//printf("l\n");
+    		if (left_child != NULL) {
+    			r = left_child->next_value_pos(number, r0s, r0e, vocmin, vocmid, l+1, c, success);
+    			if (*success != 0) {
+    				k = bitmap->select0(r+1);
+    				//printf("l: %u >> k: %u\n",r, k);
+    				return k;
+    			}
+    		}
+
+
+    		if (*success == 0 && right_child != NULL) {
+    			//printf("r2\n");
+    			r = right_child->next_value_pos(vocmid, r1s, r1e, vocmid, vocmax, l+1, c, success);
+    			k = bitmap->select1(r+1);
+    			//printf("r2: %u >> k: %u\n",r, k);
+    			return k;
+    		}
+    	}
+
+
+    	return 0;
+    }
+
+
+    void wt_node_internal::select_all(uint symbol, uint l, wt_coder *c, vector<uint> &res) const {
+    	bool is_set = c->is_set(symbol,l); //c->is_set(symbol, l);
+    	uint i;
+    	//printf("level: %u\n",l);
+	if (!is_set) {
+		if (left_child != NULL) {
+		left_child->select_all(symbol, l + 1, c, res);
+		//printf("level: %u\n",l);
+		for (i = 0; i < res.size(); i++) {
+			//printf("resl[%u]=%u\n", i, res[i]);
+			res[i] = (uint) bitmap->select0((long) (res[i]+1));
+		}
+		}
+	} else {
+		if (right_child != NULL) {
+		right_child->select_all(symbol, l + 1, c, res);
+		//printf("level: %u\n",l);
+		for (i = 0; i < res.size(); i++) {
+			//printf("resr[%u]=%u\n", i, res[i]);
+			//res[i] = (uint) bitmap->select1( (long)(res->at(i)+1));
+			res[i] = (uint) bitmap->select1((long) (res[i]+1));
+		}
+		}
+
+	}
+    }
+
     size_t wt_node_internal::getSize() const
     {
         uint s = bitmap->getSize()+sizeof(wt_node_internal);

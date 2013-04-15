@@ -38,12 +38,81 @@ int main(int argc, char **argv) {
     cin >> seq[i];
   }
   WaveletTree * wt1 = new WaveletTree(seq, N, 
-				      new wt_coder_huff(seq, N,
-							new MapperNone()),
+				      new wt_coder_binary(seq, N,	new MapperNone()),
 				      new BitSequenceBuilderRG(20), 
 				      new MapperNone());
   cout << "size = " << wt1->getSize() << " bytes" << endl;
 
+
+  for( size_t i = 0; i < N; i++) {
+	  cout << i << "\t";
+    cout << seq[i] ;
+    cout << "\t"  << wt1->access(i);
+    cout << "\t"  << wt1->rank(seq[i],i);
+    //cout << "\t"  << wt1->next_value_pos(88888880, 0, 4);
+    //cout << "\t"  << wt1->rank(seq[i]+i,i);
+    cout << endl;
+    
+    
+  }
+
+
+
+
+
+
+uint i;
+  vector<uint> res;
+  printf("select init\n");
+  wt1->select_all(77777771, res);
+    printf("select end\n");
+  for(i = 0; i < res.size(); i ++) {
+	  printf("res: %u\n", res[i]);
+  }
+  res.clear();
+  return 0;
+
+
+  
+  uint from, to;
+  uint a,b ;
+
+  while (1) {
+	  cin >> a;
+	  cin >> b;
+  cin >> from;
+  cin >> to;
+if (from == to && to == 0) break;
+printf("Getting range_report of substring [%u...%u) in alphabet [%u, %u)\n", a, b, from, to);
+  wt1->range_report(a, b, from, to, &res);
+  printf("answer size: %u\n", res.size());
+
+  for(i = 0; i < res.size(); i += 2) {
+	  printf("res: %u -> %u\n", res[i], res[i+1]);
+  }
+  res.clear();
+
+  }
+
+  while(1) {
+  cin >> a;
+  cin >> from;
+  cin >> to;
+
+  if (a == from && a == 0) break;
+
+
+  printf("next_value_pos of %u in substring [%u...%u)\n", a, from, to);
+  b = wt1->next_value_pos(a,from, to);
+  if (b < wt1->getLength()) {
+  printf("pos: %u => value: %u\n", b, seq[b]);
+  }
+  else {
+	  printf("successor of %u not found\n", a);
+  }
+
+
+  }
   delete wt1;
   delete []seq;
   return 0;

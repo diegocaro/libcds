@@ -66,6 +66,61 @@ namespace cds_static
         return std::make_pair(symbol,right-left+1);
     }
 
+    void wt_node_leaf::range_report(uint start, uint end, uint lowvoc, uint uppvoc, uint vocmin, uint vocmax, uint l, wt_coder *c, vector<uint> *res) const
+    {
+    	 //printf("level leaf: %u\n",l);
+    	 //printf("vocmin: %u\n", vocmin);
+    	 //printf("vocmax: %u\n", vocmax);
+    	 //printf("symbol: %u\n", symbol);
+
+    	      if (start >= end) {
+    	    	//  printf("start >= end in leaf\n");
+    	    	  return;
+    	      }
+
+    	      if (symbol >= lowvoc && symbol < uppvoc) {
+    	    	  //cout << "answer: " << symbol << " " << end - start << endl;
+    	    	  res->push_back(symbol);
+    	    	  res->push_back(end - start);
+    	      }
+    	      //else {
+    	    	//  printf("symbol %u not in alphabet [%u, %u)\n", symbol, lowvoc, uppvoc);
+    	      //}
+  
+    }
+
+    uint wt_node_leaf::next_value_pos(uint number, uint start, uint end, uint vocmin, uint vocmax, uint l, wt_coder *c, uint *success) const {
+    	//printf("start: %u\nend: %u\nsymbol: %u\nnumber: %u\n", start, end, symbol, number);
+    	if ( start >= end ) {
+    			//printf("not in substring\n");
+    			*success = 0;
+    			return 0;
+    		}
+
+    	if (symbol >= number) {
+    		//printf("waaa of %u is %u %u diff: %u\n", number, start, end, end-start-1);
+    		*success = 1;
+    		return end-1; // to get the symbol, you only need return  "end-start-1"
+    	}
+    	else {
+    		//printf("not in substring\n");
+    		    			*success = 0;
+    		    			return 0;
+    	}
+
+    }
+
+    void wt_node_leaf::select_all(uint symbol, uint l, wt_coder *c, vector<uint> &res) const {
+    	uint i;
+    	//printf("in leaf: %u\n", this->symbol);
+
+    	if (symbol == this->symbol) {
+    	for (i = 0; i < this->count; i++) {
+    		res.push_back(i);
+    	}
+    	}
+    }
+
     size_t wt_node_leaf::getSize() const
     {
         return sizeof(wt_node_leaf);
