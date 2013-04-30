@@ -85,4 +85,14 @@ namespace cds_static
 		}
 		return ret;
 	}
+
+	uint MapperCont::succesor(uint i) const {
+    if (i >= m->getLength()) return -1;
+    return m->rank1(m->selectNext1(i));
+	}
+	
+	uint MapperCont::length() const {
+		return m->rank1(m->getLength()-1);       // Implemented in MapperCont
+	}
+
 };

@@ -46,6 +46,9 @@ namespace cds_static
 			virtual size_t getSize() const;
 			virtual void save(ofstream & out) const;
 			static MapperNone * load(ifstream & input);
+
+			virtual int getType() const {return MAPPER_NONE_HDR;};
+
 	};
 };
 #endif							 /* __MAPPER_NONE_H */

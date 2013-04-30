@@ -110,4 +110,9 @@ namespace cds_static
         ret->maxBuffer = ret->hc->maxLength()/W+1;
         return ret;
     }
+    
+   uint wt_coder_huff::depth() const{ return hc->maxLength(); }
+
 };
+
+

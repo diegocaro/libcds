@@ -55,6 +55,10 @@ namespace cds_static
 			virtual void save(ofstream & out) const;
 			static MapperCont * load(ifstream & input);
 
+			virtual uint succesor(uint i) const;
+			virtual int getType() const {return MAPPER_CONT_HDR;};
+			virtual uint length() const;
+
 		protected:
 			MapperCont();
 			BitSequence * m;

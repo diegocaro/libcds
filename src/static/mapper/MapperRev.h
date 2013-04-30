@@ -53,6 +53,8 @@ namespace cds_static
 			virtual void save(ofstream & out) const;
 			static MapperRev * load(ifstream & input);
 
+			virtual int getType() const {return MAPPER_REV_HDR;};
+			
 		protected:
 			MapperRev();
 			uint bits;

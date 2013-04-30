@@ -64,6 +64,9 @@ namespace cds_static
             virtual void save(ofstream & fp) const = 0;
             /** Loads a coder from a file, returns NULL in case of error */
             static wt_coder * load(ifstream & fp);
+
+            virtual int getType() const = 0;
+
         protected:
             uint user_count;
     };

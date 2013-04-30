@@ -58,6 +58,15 @@ namespace cds_static
 			/** Reference counter decrementor */
 			virtual void unuse();
 
+			virtual uint succesor(uint i) const {
+				return i;       // Implemented in MapperCont
+			}
+			
+			virtual int getType() const = 0;
+			virtual uint length() const {
+				return -1;       // Implemented in MapperCont
+			}
+
 		protected:
 			/** Nr of references */
 			int userCount;

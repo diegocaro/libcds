@@ -53,6 +53,8 @@ namespace cds_static
             virtual void save(ofstream & fp) const;
             static wt_coder_binary * load(ifstream & fp);
 
+            virtual int getType() const { return WT_CODER_BINARY_HDR;};
+
         protected:
             wt_coder_binary();
             uint h;

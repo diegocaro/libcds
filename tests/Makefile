@@ -6,8 +6,8 @@ CPP=g++
 INCS=-I../includes/
 LIB=../lib/libcds.a
 
-OBJECTS= testArray.o testBitSequence.o testSequence.o testQuantile.o testHuffman.o timeSequence.o toArray.o toArray2.o
-BIN= testArray testBitSequence testSequence testHuffman timeSequence toArray toArray2 testQuantile
+OBJECTS= testArray.o testBitSequence.o testSequence.o testQuantile.o testHuffman.o timeSequence.o toArray.o toArray2.o testRange.o
+BIN= testArray testBitSequence testSequence testHuffman timeSequence toArray toArray2 testQuantile testRange
 
 %.o: %.cpp
 	@echo " [C++] Compiling $<"
@@ -65,7 +65,10 @@ timeSequence:
 	@echo " [LNK] Building timeSequence"
 	@$(CPP) $(CPPFLAGS) -o timeSequence timeSequence.o $(LIB)
 
-
+testRange:
+	@echo " [LNK] Building testRange"
+	@$(CPP) $(CPPFLAGS) -o testRange testRange.o $(LIB)
+	
 
 clean:
 	@echo " [CLN] Cleaning object and binary files"

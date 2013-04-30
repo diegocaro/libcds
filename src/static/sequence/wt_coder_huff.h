@@ -52,6 +52,9 @@ namespace cds_static
             static wt_coder_huff * load(ifstream & fp);
             //uint * get_buffer(uint symbol, uint *n);
 
+            virtual int getType() const { return WT_CODER_HUFF_HDR;};
+	    virtual uint depth() const;
+
         protected:
             wt_coder_huff();
             HuffmanCoder * hc;

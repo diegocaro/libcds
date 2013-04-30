@@ -139,21 +139,106 @@ namespace cds_static
         return std::make_pair( am->unmap(res.first) , res.second );
     }
     
-    void WaveletTree::range_report(uint start, uint end, vector<uint> *res) const
-    {
-          root->range_report(start, end, 0, 1u << c->depth(), 0, 1u << c->depth(), 0, c, res);
+    void WaveletTree::range_report(uint start, uint end, vector<uint> &res) const {
+    	uint max_sigma;
+	    
+    	if ( am->getType() == MAPPER_NONE_HDR) {
+    		max_sigma = 1u << c->depth();
+		
+    		//who cares about max sigma in huffman???? we need to traverse the all tree :(
+    	/*	else if (c->getType() == WT_CODER_HUFF_HDR) {
+    			max_sigma = c->depth() * 2;
+    		}
+    		*/
+    	}
+	    
+    	if ( am->getType() == MAPPER_CONT_HDR) {
+    		max_sigma = am->length();
+    	}
+	
+    	//printf("max_sigma: %u\n", max_sigma);
+	  
+	  root->range_report(start, end, 0, max_sigma, 0, max_sigma, 0, c, am, res);
+          /*for(uint i = 0; i < res.size(); i+=2) {
+        	res[i] = am->unmap(res[i]);
+          }*/
+
     }
 
-    void WaveletTree::range_report(uint start, uint end, uint lowvoc, uint uppvoc, vector<uint> *res) const
+    void WaveletTree::range_report(uint start, uint end, uint lowvoc, uint uppvoc, vector<uint> &res) const
     {
-      root->range_report(start, end, lowvoc, uppvoc, 0, 1u << c->depth(), 0, c, res);
+	    // We can't use HUFFMAN with CODER_BINARY, because we arent able to
+	    // to map symbols that arent in the sequence (but can belong to sigma)
+	    
+	    
+	uint max_sigma;
+	    
+	if ( am->getType() == MAPPER_NONE_HDR) {
+		max_sigma = 1u << c->depth();
+		
+		//who cares about max sigma in huffman???? we need to traverse the all tree :(
+	/*	else if (c->getType() == WT_CODER_HUFF_HDR) {
+			max_sigma = c->depth() * 2;
+		}
+		*/
+	}
+	    
+	if ( am->getType() == MAPPER_CONT_HDR) {
+		max_sigma = am->length();
+	}
+	
+	//printf("max_sigma: %u\n", max_sigma);
+	
+	root->range_report(start, end, lowvoc, uppvoc, 0, max_sigma, 0, c, am, res);
     }
 
     uint WaveletTree::next_value_pos(uint number, uint start, uint end) const {
+	    // We can't use HUFFMAN with CODER_BINARY, because we arent able to
+	    // to map symbols that arent in the sequence (but can belong to sigma)
     	uint success = 0;
     	uint pos;
-    	pos = root->next_value_pos(number, start, end, 0, 1u << c->depth(), 0, c, &success);
+	
+	uint mnumber;
+	mnumber = am->succesor(number);
+	
+//	printf("begin number: %u\n", number);
+//	printf("begin map number: %u\n", mnumber);
+	
+	if (mnumber+1 == 0) {
+		//there isnt a successor
+		return this->n;
+	}
 
+	if (c->getType() == WT_CODER_BINARY_HDR) {
+		uint max_sigma;
+	    
+		if ( am->getType() == MAPPER_NONE_HDR)
+			max_sigma = 1u << c->depth();
+	    
+		if ( am->getType() == MAPPER_CONT_HDR) 
+			max_sigma = am->length();
+		/*
+		if (mnumber > max_sigma) {
+			return this->n;
+		}
+		*/
+		
+		pos = root->next_value_pos_bin(mnumber, start, end, 0, max_sigma, 0, c, &success);
+	}
+	else if (c->getType() == WT_CODER_HUFF_HDR) {
+		uint min;
+		uint min_pos;
+		
+		min = -1;
+		
+		root->next_value_pos_huff(mnumber, start, end, &min, &min_pos, &success);
+		//printf("min: %u -> %u\n", min, am->unmap(min));
+		//printf("min pos: %u\n", min_pos);
+		uint * s = c->get_symbol(min);
+		success = 1;
+		pos = root->select(s, min_pos, 0, c)-1;
+		delete [] s;
+	}
     	//printf("success: %u\n", success);
 
     	if (success)
@@ -164,12 +249,12 @@ namespace cds_static
     }
 
     void WaveletTree::select_all(uint symbol, vector<uint> &res) const {
-    //	uint * s = c->get_symbol(am->map(symbol));
+	uint * s = c->get_symbol(am->map(symbol));
   //  	root->select_all(s, 0, c, res);
 
-    	root->select_all(symbol, 0, c, res);
+    	root->select_all(s, 0, c, res);
 
-//    	delete [] s;
+	delete [] s;
 
     }
 
