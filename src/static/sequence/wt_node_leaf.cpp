@@ -181,13 +181,14 @@ namespace cds_static
 
     void wt_node_leaf::select_all(uint *symbol, uint l, wt_coder *c, vector<uint> &res) const {
     	uint i;
-    	//printf("in leaf: %u\n", this->symbol);
+//    	printf("in leaf: %u\n", this->symbol);
 
-    	//if (symbol == this->symbol) {
-    	for (i = 0; i < this->count; i++) {
-    		res.push_back(i);
-    	}
-    	//}
+	// FIXME *symbol is coded, so can be different of this->symbol (like huffman or other code)
+    	if (*symbol == this->symbol) {
+		for (i = 0; i < this->count; i++) {
+    			res.push_back(i);
+    		}
+	}
     }
 
     size_t wt_node_leaf::getSize() const
