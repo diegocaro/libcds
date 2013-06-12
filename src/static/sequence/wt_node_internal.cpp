@@ -445,7 +445,7 @@ namespace cds_static
 
     size_t wt_node_internal::getSize() const
     {
-        uint s = bitmap->getSize()+sizeof(wt_node_internal);
+        size_t s = bitmap->getSize()+sizeof(wt_node_internal);
         if(left_child!=NULL)
             s += left_child->getSize();
         if(right_child!=NULL)
