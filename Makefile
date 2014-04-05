@@ -19,7 +19,7 @@ tests: libcompact
 
 shared_lib: libcompact
 	@echo " [C++] Compiling shared library"
-	@g++ -shared $(CPPFLAGS) -w -o lib/libcds.so ./lib/libcds.a
+	@$(CXX) -shared $(CPPFLAGS) -w -o lib/libcds.so ./lib/libcds.a
 	
 shared_lib_install:
 	@cp ./lib/libcds.so /usr/lib

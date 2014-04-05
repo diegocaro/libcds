@@ -1,5 +1,5 @@
 
-CPP=g++
+#CPP=g++
 
 INCL=-I../includes/
 
@@ -20,7 +20,7 @@ OBJECTS=$(UTILS_OBJ) $(STATIC_OBJ)
 
 %.o: %.cpp
 	@echo " [C++] Compiling $<"
-	@$(CPP) $(CPPFLAGS) $(INCL) -c $< -o $@
+	@$(CXX) $(CPPFLAGS) $(INCL) -c $< -o $@
 
 all: pre lib
 

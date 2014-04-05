@@ -43,6 +43,8 @@ namespace cds_utils
 
 	using namespace std;
 	typedef unsigned char uchar;
+	
+	typedef unsigned long ulong;
 
 	/** mask for obtaining the first 5 bits */
 	const uint mask31 = 0x0000001F;
