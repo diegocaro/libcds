@@ -2,7 +2,12 @@
 # CPPFLAGS=-g3 -Wall -O0 -fPIC
 #-DVERBOSE
 CPPFLAGS=-O3 -Wall -DNDEBUG -fPIC
+DEBUGCPPFLAGS=-O0 -Wall -fPIC -g
 #CPPFLAGS=-O0 -Wall -fPIC -g
+
+debug: CPPFLAGS=$(DEBUGCPPFLAGS)
+debug: clean all
+
 all: libcompact tests
 
 doc:
