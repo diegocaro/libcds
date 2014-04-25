@@ -5,10 +5,12 @@ CPPFLAGS=-O3 -Wall -DNDEBUG -fPIC
 DEBUGCPPFLAGS=-O0 -Wall -fPIC -g
 #CPPFLAGS=-O0 -Wall -fPIC -g
 
+all: libcompact tests
+
 debug: CPPFLAGS=$(DEBUGCPPFLAGS)
 debug: clean all
 
-all: libcompact tests
+
 
 doc:
 	@echo " [DOC] Generating documentation"
