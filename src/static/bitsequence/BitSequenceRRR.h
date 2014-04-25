@@ -109,7 +109,7 @@ namespace cds_static
 			/** Length of C and O (in uints) */
 			uint C_len, O_len;
 			/** Bits required per field for C and in total for O */
-			uint C_field_bits, O_bits_len;
+			uint C_field_bits; size_t O_bits_len;
 			/** C and O samplings */
 			uint *C_sampling, *O_pos;
 			/** Length of the samplings */
