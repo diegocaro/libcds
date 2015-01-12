@@ -70,7 +70,7 @@ namespace cds_static
 
 		protected:
 			HuffmanCoder();
-			THuff huff_table;
+			THuffx huff_table;
 	};
 
 };

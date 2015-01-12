@@ -101,7 +101,7 @@ namespace cds_static
 			return NULL;
 		}
 		HuffmanCoder * ret = new HuffmanCoder();
-		ret->huff_table = loadHuff(fp,1);
+		ret->huff_table = loadHuff(fp);
 		return ret;
 	}
 
