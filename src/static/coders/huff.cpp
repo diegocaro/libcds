@@ -217,9 +217,9 @@
         saveValue<uint>(f,H.num_enc,H.depth+1);
     }
 
-    uint sizeHuff (const THuffx H) {
+    size_t sizeHuff (const THuffx H) {
 			/*recalcular*/
-			uint mem = sizeof(THuffx);
+            size_t mem = sizeof(THuffx);
 			mem += 4*(H.depth+1)*sizeof(uint); //num_enc+num_dec+H.fst+H.pos
 			mem += (H.lim+1)*sizeof(uint);    //H.symb
 			return mem;

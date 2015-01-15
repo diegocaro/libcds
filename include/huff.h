@@ -70,7 +70,7 @@ using namespace cds_utils;
      *
      *  @author Gonzalo Navarro
      */
-    uint sizeHuff (const THuffx H);
+    size_t sizeHuff (const THuffx H);
 
     /** Frees H
      *

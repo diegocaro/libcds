@@ -27,6 +27,8 @@
 #include <Array.h>
 #include <Coder.h>
 
+#include <unordered_map>
+
 using namespace cds_utils;
 namespace cds_static
 {
@@ -45,6 +47,7 @@ namespace cds_static
 			HuffmanCoder(uint * seq, size_t n);
 			HuffmanCoder(uchar * seq, size_t n);
 			HuffmanCoder(Array & seq);
+			HuffmanCoder(unordered_map<unsigned,unsigned> &dict);
 
 			virtual ~HuffmanCoder();
 

@@ -62,6 +62,19 @@ namespace cds_static
 		delete [] occ;
 	}
 
+    HuffmanCoder::HuffmanCoder(unordered_map<unsigned,unsigned> &dict) {
+        uint max_v = 0;
+        for(auto it = dict.begin(); it != dict.end(); ++it)
+            max_v = max(max_v,it->first);
+        uint * occ = new uint[max_v+1];
+        for(size_t i=0;i<max_v+1;i++)
+            occ[i] = 0;
+        for(auto it = dict.begin(); it != dict.end(); ++it)
+            occ[it->first] = it->second;
+        huff_table = createHuff(occ, max_v);
+        delete [] occ;
+    }
+
 	HuffmanCoder::HuffmanCoder() {
 	}
 
