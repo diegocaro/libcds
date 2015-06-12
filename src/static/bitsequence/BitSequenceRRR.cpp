@@ -62,7 +62,7 @@ namespace cds_static
 			C[i] = 0;
 		O_bits_len = 0;
 		for(uint i=0;i<C_len;i++) {
-			uint value = popcount(get_var_field(bitseq,i*BLOCK_SIZE,min((uint)len-1,(i+1)*BLOCK_SIZE-1)));
+			uint value = popcount(get_var_field(bitseq,i*BLOCK_SIZE,min(len-1,(size_t)(i+1)*BLOCK_SIZE-1)));
 			assert(value<=BLOCK_SIZE);
 			set_field(C,C_field_bits,i,value);
 			ones += value;
@@ -76,7 +76,7 @@ namespace cds_static
 			O[i] = 0;
 		uint O_pos = 0;
 		for(uint i=0;i<C_len;i++) {
-			uint value = (ushort)get_var_field(bitseq,i*BLOCK_SIZE,min((uint)len-1,(i+1)*BLOCK_SIZE-1));
+			uint value = (ushort)get_var_field(bitseq,i*BLOCK_SIZE,min(len-1,(size_t)(i+1)*BLOCK_SIZE-1));
 			set_var_field(O,O_pos,O_pos+E->get_log2binomial(BLOCK_SIZE,popcount(value))-1,E->compute_offset((ushort)value));
 			O_pos += E->get_log2binomial(BLOCK_SIZE,popcount(value));
 		}
@@ -421,7 +421,7 @@ namespace cds_static
 			//cout << ret->C_field_bits << endl;
 			ret->O_len = loadValue<uint>(f);
 			//cout << ret->O_len << endl;
-			ret->O_bits_len = loadValue<uint>(f);
+			ret->O_bits_len = loadValue<size_t>(f);
 			//cout << ret->O_bits_len << endl;
 			ret->sample_rate = loadValue<uint>(f);
 			//cout << ret->sample_rate << endl;
